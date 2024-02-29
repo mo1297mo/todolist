@@ -12,9 +12,12 @@ const todoController = {
   },
   getTodos: async (req, res) => {
     try {
+      console.log("Fetching todos from the database...");
       const todos = await Todo.find();
+      console.log("Fetched todos:", todos);
       res.json(todos);
     } catch (err) {
+      console.error("Error fetching todos:", err);
       res.status(500).json({ message: err.message });
     }
   },

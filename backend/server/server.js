@@ -3,6 +3,9 @@ const express = require('express');
 // Import cors
 const cors = require('cors');
 
+// Database connection
+require('../mongoDB/database');
+
 // Import todoRoutes
 const todoRoutes = require('../router/todoRoutes.js');
 
