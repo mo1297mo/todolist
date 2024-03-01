@@ -31,6 +31,7 @@ export class TodoComponent implements OnInit, OnDestroy {
     if (!this.newTodo.title.trim()) return;
     const sub = this.todoService.addTodo(this.newTodo).subscribe({
       next: (todo) => {
+        console.log("Added Todo:", todo);
         this.todos.push(todo);
         this.newTodo = { title: '', isCompleted: false };
       },
@@ -40,20 +41,26 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   toggleTodoComplete(todo: Todo) {
+    console.log("Updating todo with ID:", todo._id); // This should not log 'undefined'
+    if (!todo._id) {
+      console.error("Todo ID is undefined.");
+      return;
+    }
     const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
-    const sub = this.todoService.updateTodo(updatedTodo).subscribe({
+    this.todoService.updateTodo(updatedTodo).subscribe({
+      next: () => this.loadTodos(), // Consider reloading todos to reflect the update
       error: (error) => console.error('Error updating todo:', error),
     });
-    this.subscriptions.add(sub);
   }
+  
 
   removeTodo(todo: Todo) {
-    if (!todo.id) {
+    if (!todo._id) {
       this.todos = this.todos.filter((t) => t !== todo);
       return;
     }
-    const sub = this.todoService.deleteTodo(todo.id).subscribe({
-      next: () => this.todos = this.todos.filter((t) => t.id !== todo.id),
+    const sub = this.todoService.deleteTodo(todo._id).subscribe({
+      next: () => this.todos = this.todos.filter((t) => t._id !== todo._id),
       error: (error) => console.error('Error deleting todo:', error),
     });
     this.subscriptions.add(sub);

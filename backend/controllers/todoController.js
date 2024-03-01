@@ -40,6 +40,7 @@ const todoController = {
 
   updateTodo: async (req, res) => {
     try {
+      console.log("Received ID for update:", req.params.id);
       const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!todo) {
         return res.status(404).json({ message: 'Todo not found' });
