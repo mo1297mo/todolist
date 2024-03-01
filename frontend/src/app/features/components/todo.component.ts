@@ -1,31 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule here
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo.model';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-todo',
-  standalone: true,
-  imports: [
-    CommonModule, // Add CommonModule here
-    FormsModule,
-    HttpClientModule,
-    CheckboxModule,
-    InputTextModule,
-    ButtonModule,
-    // ... other necessary modules
-  ],
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss'],
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent implements OnInit, OnDestroy {
   todos: Todo[] = [];
   newTodo: Todo = { title: '', isCompleted: false };
+  subscriptions: Subscription = new Subscription();
 
   constructor(private todoService: TodoService) {}
 
@@ -34,32 +20,46 @@ export class TodoComponent implements OnInit {
   }
 
   loadTodos() {
-    this.todoService.getTodos().subscribe((todos) => {
-      this.todos = todos;
+    const sub = this.todoService.getTodos().subscribe({
+      next: (todos) => this.todos = todos,
+      error: (error) => console.error('Error fetching todos:', error),
     });
+    this.subscriptions.add(sub);
   }
 
   addTodo() {
-    this.todoService.addTodo(this.newTodo).subscribe((todo) => {
-      this.todos.push(todo);
-      this.newTodo = { title: '', isCompleted: false }; // Reset the new todo
+    if (!this.newTodo.title.trim()) return;
+    const sub = this.todoService.addTodo(this.newTodo).subscribe({
+      next: (todo) => {
+        this.todos.push(todo);
+        this.newTodo = { title: '', isCompleted: false };
+      },
+      error: (error) => console.error('Error adding todo:', error),
     });
+    this.subscriptions.add(sub);
   }
 
   toggleTodoComplete(todo: Todo) {
-    todo.isCompleted = !todo.isCompleted;
-    this.todoService.updateTodo(todo).subscribe();
+    const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
+    const sub = this.todoService.updateTodo(updatedTodo).subscribe({
+      error: (error) => console.error('Error updating todo:', error),
+    });
+    this.subscriptions.add(sub);
   }
 
   removeTodo(todo: Todo) {
-    if (todo.id) {
-      this.todoService.deleteTodo(todo.id).subscribe(() => {
-        this.todos = this.todos.filter((t) => t.id !== todo.id);
-      });
-    } else {
-      // Handle the case where todo.id is undefined, e.g., remove it from the view if it was never saved to the database
+    if (!todo.id) {
       this.todos = this.todos.filter((t) => t !== todo);
+      return;
     }
+    const sub = this.todoService.deleteTodo(todo.id).subscribe({
+      next: () => this.todos = this.todos.filter((t) => t.id !== todo.id),
+      error: (error) => console.error('Error deleting todo:', error),
+    });
+    this.subscriptions.add(sub);
   }
-  
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 }
