@@ -1,0 +1,19 @@
+<h1>Todo List</h1>
+
+<!-- Input form for new todo -->
+<div class="p-fluid">
+  <div class="p-field">
+    <label for="new-todo">New Todo</label>
+    <input id="new-todo" type="text" pInputText [(ngModel)]="newTodo.title" />
+  </div>
+  <button pButton type="button" label="Add" icon="pi pi-plus" (click)="addTodo()"></button>
+</div>
+
+<!-- List of todos -->
+<ul>
+  <li *ngFor="let todo of todos">
+    <input type="checkbox" [checked]="todo.isCompleted" (change)="toggleTodoComplete(todo)" pInputSwitch />
+    <span [ngClass]="{'todo-complete': todo.isCompleted}">{{ todo.title }}</span>
+    <button pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined" (click)="removeTodo(todo)"></button>
+  </li>
+</ul>
