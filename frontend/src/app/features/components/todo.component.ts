@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Import CommonModule here
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo.model';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -10,7 +12,9 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-todo',
   standalone: true,
   imports: [
-    FormsModule, // Import FormsModule here
+    CommonModule, // Add CommonModule here
+    FormsModule,
+    HttpClientModule,
     CheckboxModule,
     InputTextModule,
     ButtonModule,
