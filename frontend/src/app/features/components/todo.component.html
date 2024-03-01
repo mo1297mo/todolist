@@ -1,7 +1,7 @@
 <!-- Todo List Display -->
 <ul>
   <li *ngFor="let todo of todos">
-    <p-checkbox [label]="todo.title" [(ngModel)]="todo.isCompleted" binary="true" (onChange)="toggleTodoComplete(todo)"></p-checkbox>
+    <p-checkbox [label]="todo.title" [(ngModel)]="todo.isCompleted" [binary]="true" (onChange)="toggleTodoComplete(todo)"></p-checkbox>
     <button pButton icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined" (click)="removeTodo(todo)"></button>
   </li>
 </ul>
