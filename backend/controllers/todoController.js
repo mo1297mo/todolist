@@ -21,15 +21,47 @@ const todoController = {
       res.status(500).json({ message: err.message });
     }
   },
+  
   getTodoById: async (req, res) => {
-    // Implement logic to find a todo by ID
+    try {
+      const todo = await Todo.findById(req.params.id);
+      if (!todo) {
+        return res.status(404).json({ message: 'Todo not found' });
+      }
+      res.json(todo);
+    } catch (err) {
+      if (err.kind === 'ObjectId') {
+        return res.status(400).json({ message: 'Invalid ID format' });
+      }
+      res.status(500).json({ message: err.message });
+    }
   },
+  
+
   updateTodo: async (req, res) => {
-    // Implement logic to update a todo
+    try {
+      const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!todo) {
+        return res.status(404).json({ message: 'Todo not found' });
+      }
+      res.json(todo);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
   },
+  
   deleteTodo: async (req, res) => {
-    // Implement logic to delete a todo
-  }
+    try {
+      const result = await Todo.findByIdAndDelete(req.params.id);
+      if (!result) {
+        return res.status(404).json({ message: 'Todo not found' });
+      }
+      res.json({ message: 'Todo deleted successfully' });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  },
+  
 };
 
 module.exports = todoController;
