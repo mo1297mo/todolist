@@ -1,10 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo.model';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-todo',
-  templateUrl: './todo.component.html'
+  standalone: true,
+  imports: [
+    FormsModule, // Import FormsModule here
+    CheckboxModule,
+    InputTextModule,
+    ButtonModule,
+    // ... other necessary modules
+  ],
+  templateUrl: './todo.component.html',
+  styleUrls: ['./todo.component.scss'],
 })
 export class TodoComponent implements OnInit {
   todos: Todo[] = [];
