@@ -13,6 +13,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   newTodo: Todo = { title: '', isCompleted: false };
   subscriptions: Subscription = new Subscription();
   selectedTodo: Todo | null = null;
+  errorMessage: string | null = null;
 
   constructor(private todoService: TodoService) {}
 
@@ -23,64 +24,73 @@ export class TodoComponent implements OnInit, OnDestroy {
   loadTodos() {
     const sub = this.todoService.getTodos().subscribe({
       next: (todos) => this.todos = todos,
-      error: (error) => console.error('Error fetching todos:', error),
+      error: (error) => this.handleError('Error fetching todos', error),
     });
     this.subscriptions.add(sub);
   }
 
   addTodo() {
     if (!this.newTodo.title.trim()) return;
+
     const sub = this.todoService.addTodo(this.newTodo).subscribe({
       next: (todo) => {
-        console.log("Added Todo:", todo);
         this.todos.push(todo);
-        this.newTodo = { title: '', isCompleted: false };
+        this.newTodo = { title: '', isCompleted: false }; // Reset the new todo
       },
-      error: (error) => console.error('Error adding todo:', error),
+      error: (error) => this.handleError('Error adding todo', error),
     });
     this.subscriptions.add(sub);
   }
 
   toggleTodoComplete(todo: Todo) {
-    console.log("Updating todo with ID:", todo._id); // This should not log 'undefined'
     if (!todo._id) {
-      console.error("Todo ID is undefined.");
+      this.handleError('Todo ID is undefined', {});
       return;
     }
     const updatedTodo = {
+      _id: todo._id,
       title: todo.title,
       description: todo.description,
       isCompleted: todo.isCompleted,
       dueDate: todo.dueDate
     };
-    this.todoService.updateTodo(updatedTodo).subscribe({
-      next: () => this.loadTodos(), // Consider reloading todos to reflect the update
-      error: (error) => console.error('Error updating todo:', error),
-    });
-  }
-
-  saveChanges(): void {
-    // Implement the logic to save changes to the selected todo
-  }
-
-  selectTodo(todo: Todo): void {
-    this.selectedTodo = todo;
-  }
-  
-
-  removeTodo(todo: Todo) {
-    if (!todo._id) {
-      this.todos = this.todos.filter((t) => t !== todo);
-      return;
-    }
-    const sub = this.todoService.deleteTodo(todo._id).subscribe({
-      next: () => this.todos = this.todos.filter((t) => t._id !== todo._id),
-      error: (error) => console.error('Error deleting todo:', error),
+    const sub = this.todoService.updateTodo(updatedTodo).subscribe({
+      next: () => this.loadTodos(), // Reload todos to reflect the update
+      error: (error) => this.handleError('Error updating todo', error),
     });
     this.subscriptions.add(sub);
   }
 
+  removeTodo(todo: Todo) {
+    if (!todo._id) return;
+    const sub = this.todoService.deleteTodo(todo._id).subscribe({
+      next: () => this.todos = this.todos.filter((t) => t._id !== todo._id),
+      error: (error) => this.handleError('Error deleting todo', error),
+    });
+    this.subscriptions.add(sub);
+  }
+
+  saveChanges() {
+    if (this.selectedTodo && this.selectedTodo._id) {
+      const sub = this.todoService.updateTodo(this.selectedTodo).subscribe({
+        next: () => {
+          this.loadTodos(); // Reload todos to reflect the update
+          this.selectedTodo = null; // Clear selection
+        },
+        error: (error) => this.handleError('Error saving changes', error),
+      });
+      this.subscriptions.add(sub);
+    } else {
+      this.handleError('No selected todo to save changes', {});
+    }
+  }
+
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  handleError(message: string, error: any) {
+    console.error(message, error);
+    this.errorMessage = message;
   }
 }

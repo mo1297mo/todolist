@@ -14,3 +14,6 @@
   </div>
   <button pButton type="button" label="Add" (click)="addTodo()"></button>
 </div>
+
+<!-- Error Message Display -->
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
