@@ -14,7 +14,6 @@ const todoController = {
     try {
       console.log("Fetching todos from the database...");
       const todos = await Todo.find();
-      console.log("Fetched todos:", todos);
       res.json(todos);
     } catch (err) {
       console.error("Error fetching todos:", err);
