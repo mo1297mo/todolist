@@ -41,10 +41,19 @@ const todoController = {
   updateTodo: async (req, res) => {
     try {
       console.log("Received ID for update:", req.params.id);
-      const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const updatedData = {
+        title: req.body.title,
+        description: req.body.description,
+        isCompleted: !req.body.isCompleted,
+        dueDate: req.body.dueDate
+      };
+      console.log("isCompleted from request:", updatedData.isCompleted);
+      
+      const todo = await Todo.findByIdAndUpdate(req.params.id, updatedData, { new: true });      
       if (!todo) {
         return res.status(404).json({ message: 'Todo not found' });
       }
+      console.log("Updated todo:", todo);
       res.json(todo);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -53,6 +62,7 @@ const todoController = {
   
   deleteTodo: async (req, res) => {
     try {
+      console.log("Received ID for delete:", req.params.id);
       const result = await Todo.findByIdAndDelete(req.params.id);
       if (!result) {
         return res.status(404).json({ message: 'Todo not found' });
