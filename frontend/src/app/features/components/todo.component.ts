@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TodoService } from '../services/todo.service';
 import { Todo } from '../models/todo.model';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-todo',
@@ -15,11 +16,15 @@ export class TodoComponent implements OnInit, OnDestroy {
   selectedTodo: Todo | null = null;
   errorMessage: string | null = null;
   displaySidebar: boolean = true;
+  
 
-  constructor(private todoService: TodoService) {}
+  constructor(public themeService: ThemeService, private todoService: TodoService) {
+    this.themeService.loadTheme();
+  }
 
   ngOnInit() {
     this.loadTodos();
+    this.themeService.loadTheme();
   }
 
   loadTodos() {

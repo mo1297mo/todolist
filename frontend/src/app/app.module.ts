@@ -10,6 +10,7 @@ import { TodoComponent } from './features/components/todo.component';
 import { TagModule } from 'primeng/tag';
 import { SidebarModule } from 'primeng/sidebar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ThemeService } from './features/services/theme.service';
 
 
 @NgModule({
