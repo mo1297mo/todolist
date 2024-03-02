@@ -43,10 +43,9 @@ const todoController = {
       const updatedData = {
         title: req.body.title,
         description: req.body.description,
-        isCompleted: !req.body.isCompleted,
+        isCompleted: req.body.isCompleted,
         dueDate: req.body.dueDate
       };
-      console.log("isCompleted from request:", updatedData.isCompleted);
       
       const todo = await Todo.findByIdAndUpdate(req.params.id, updatedData, { new: true });      
       if (!todo) {

@@ -12,6 +12,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   todos: Todo[] = [];
   newTodo: Todo = { title: '', isCompleted: false };
   subscriptions: Subscription = new Subscription();
+  selectedTodo: Todo | null = null;
 
   constructor(private todoService: TodoService) {}
 
@@ -46,11 +47,24 @@ export class TodoComponent implements OnInit, OnDestroy {
       console.error("Todo ID is undefined.");
       return;
     }
-    const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
+    const updatedTodo = {
+      title: todo.title,
+      description: todo.description,
+      isCompleted: todo.isCompleted,
+      dueDate: todo.dueDate
+    };
     this.todoService.updateTodo(updatedTodo).subscribe({
       next: () => this.loadTodos(), // Consider reloading todos to reflect the update
       error: (error) => console.error('Error updating todo:', error),
     });
+  }
+
+  saveChanges(): void {
+    // Implement the logic to save changes to the selected todo
+  }
+
+  selectTodo(todo: Todo): void {
+    this.selectedTodo = todo;
   }
   
 
