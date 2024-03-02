@@ -1,19 +1,20 @@
-<!-- Todo List Display -->
-<ul>
-  <li *ngFor="let todo of todos">
-    <p-checkbox [label]="todo.title" [(ngModel)]="todo.isCompleted" [binary]="true" (onChange)="toggleTodoComplete(todo)"></p-checkbox>
-    <button pButton icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined" (click)="removeTodo(todo)"></button>
-  </li>
-</ul>
+<div class="container">
+  <!-- Todo List Display -->
+  <ul>
+    <li *ngFor="let todo of todos">
+      <p-checkbox [label]="todo.title" [(ngModel)]="todo.isCompleted" [binary]="true" (onChange)="toggleTodoComplete(todo)"></p-checkbox>
+      <button (click)="removeTodo(todo)" class="delete-btn">
+        <i class="pi pi-trash"></i> <!-- Using PrimeIcons -->
+      </button>
+    </li>
+  </ul>
 
-<!-- Form to Add New Todo -->
-<div class="p-fluid">
-  <div class="p-field">
-    <label for="todoTitle">Todo</label>
-    <input id="todoTitle" type="text" pInputText [(ngModel)]="newTodo.title" placeholder="Enter todo">
+  <!-- Form to Add New Todo -->
+  <div class="add-todo-container">
+    <input type="text" pInputText [(ngModel)]="newTodo.title" placeholder="Write down your tasks...">
+    <button pButton type="button" label="Add" (click)="addTodo()" class="add-btn"></button>
   </div>
-  <button pButton type="button" label="Add" (click)="addTodo()"></button>
-</div>
+
 
 <!-- Error Message Display -->
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
