@@ -14,7 +14,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
   selectedTodo: Todo | null = null;
   errorMessage: string | null = null;
-  displaySidebar: boolean = false;
+  displaySidebar: boolean = true;
 
   constructor(private todoService: TodoService) {}
 
