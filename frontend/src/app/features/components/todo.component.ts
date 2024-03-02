@@ -14,6 +14,7 @@ export class TodoComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
   selectedTodo: Todo | null = null;
   errorMessage: string | null = null;
+  displaySidebar: boolean = false;
 
   constructor(private todoService: TodoService) {}
 
@@ -27,6 +28,13 @@ export class TodoComponent implements OnInit, OnDestroy {
       error: (error) => this.handleError('Error fetching todos', error),
     });
     this.subscriptions.add(sub);
+  }
+
+
+  onMenuClick(route: string): void {
+    this.displaySidebar = false;
+    // Add your navigation logic here, for example using Angular Router:
+    // this.router.navigate([route]);
   }
 
   addTodo() {

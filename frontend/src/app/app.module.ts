@@ -7,10 +7,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AppComponent } from './app.component';
 import { TodoComponent } from './features/components/todo.component';
+import { TagModule } from 'primeng/tag';
 import { SidebarModule } from 'primeng/sidebar';
-import { ListboxModule } from 'primeng/listbox';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [AppComponent, TodoComponent],
@@ -21,10 +21,9 @@ import { DropdownModule } from 'primeng/dropdown';
     CheckboxModule,
     InputTextModule,
     ButtonModule,
+    TagModule,
     SidebarModule,
-    ListboxModule,
-    CalendarModule,
-    DropdownModule
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

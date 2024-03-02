@@ -1,8 +1,22 @@
 <div class="container">
   <!-- Todo List Display -->
+  <!-- Sidebar -->
+<p-sidebar [(visible)]="displaySidebar" position="left" styleClass="ui-sidebar-sm">
+  <h1>Menu</h1>
+  <button type="button" pButton label="Dashboard" (click)="onMenuClick('dashboard')"></button>
+  <button type="button" pButton label="Tasks" (click)="onMenuClick('tasks')"></button>
+  <button type="button" pButton label="Settings" (click)="onMenuClick('settings')"></button>
+  <!-- Add more menu items here -->
+</p-sidebar>
+
+<!-- Sidebar toggle button -->
+<button type="button" pButton icon="pi pi-bars" (click)="displaySidebar = true"></button>
+
+  <h2>Todo List App</h2>
   <ul>
     <li *ngFor="let todo of todos">
       <p-checkbox [label]="todo.title" [(ngModel)]="todo.isCompleted" [binary]="true" (onChange)="toggleTodoComplete(todo)"></p-checkbox>
+      <p-tag [value]="todo.isCompleted ? 'Done' : 'Pending'" severity="{{todo.isCompleted ? 'success' : 'warning'}}"></p-tag>
       <button (click)="removeTodo(todo)" class="delete-btn">
         <i class="pi pi-trash"></i> <!-- Using PrimeIcons -->
       </button>
