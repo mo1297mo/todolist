@@ -43,3 +43,6 @@ Thumbs.db
 
 # Ignore the dist folder
 node_modules
+
+
+.env
