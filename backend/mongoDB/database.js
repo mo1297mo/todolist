@@ -10,7 +10,6 @@ const dbName = process.env.DB_NAME;
 
 const connectionString = `mongodb+srv://${user}:${password}@${host}/${dbName}?retryWrites=true&w=majority&authSource=admin&tls=true`;
 
-console.log(connectionString); // Temporarily log the connection string to verify its format
 
 mongoose.connect(connectionString).then(() => {
     console.log("Connected to MongoDB successfully!");
