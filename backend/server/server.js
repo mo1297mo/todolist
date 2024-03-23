@@ -2,8 +2,6 @@
 const express = require('express');
 // Import cors
 const cors = require('cors');
-// Import dotenv and call config to load the environment variables
-require('dotenv').config();
 
 // Database connection
 require('../mongoDB/database');
@@ -17,8 +15,8 @@ const app = express();
 // Define a port number
 const PORT = process.env.PORT || 3000;
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+// Middleware
+app.use(express.json()); // To parse JSON bodies
 
 // Read CORS origin from .env file, default to 'http://localhost:4200' if not set
 const corsOptions = {
@@ -27,6 +25,7 @@ const corsOptions = {
 
 // Enable CORS for all requests using the CORS options
 app.use(cors(corsOptions));
+
 
 // Define a route handler for GET request to /api/todos
 app.use('/api/todos', todoRoutes);
