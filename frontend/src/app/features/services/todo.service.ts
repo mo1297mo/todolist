@@ -3,13 +3,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Todo } from '../models/todo.model';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  public apiUrl = 'http://localhost:3000/api/todos';
+  public apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
