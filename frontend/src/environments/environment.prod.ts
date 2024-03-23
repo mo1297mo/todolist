@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:3000/api/todos', // Production API URL
+    apiUrl: 'https://hammerhead-app-4gzpl.ondigitalocean.app', // Production API URL
   };
   
